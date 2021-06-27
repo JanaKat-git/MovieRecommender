@@ -1,11 +1,16 @@
 '''
 Controller file for the web appilaction
+
+The central file of the application
 '''
 
 from flask import Flask
 from flask import render_template
 from flask import request
-from recommender import create_user_item_matrix, model_recommender, user_recommendation
+import pandas as pd
+from recommender import  user_recommendation
+import pickle
+
 
 
 app = Flask(__name__)
@@ -16,15 +21,22 @@ def index():
 
 @app.route('/recommender')
 def recommender():
+    #save user input as dict and print it
     html_form_data = dict(request.args)
     print(html_form_data)
 
-    df = create_user_item_matrix('ratings.csv', 'movies.csv', 10_000)
-    recs= user_recommendation(html_form_data, model_recommender(df.iloc[0:500_000]))
+    #load pickled model
+    with open("nmf_m.pkl", "rb") as f:
+        R, P, Q, nmf = pickle.load(f) 
     
-
+    print('loaded')
+    
+    #make recommendations for new user
+    recs= user_recommendation(html_form_data, R, Q, nmf)
+    print(recs)
+    
     return render_template('recommendations.html',
-                            movies = recs)
+                            movies = '1')
 
 if __name__ == "__main__": 
     app.run(debug=True, port=5500) 
