@@ -36,7 +36,7 @@ def recommender():
     print(recs)
     
     return render_template('recommendations.html',
-                            movies = '1')
+                            movies = 'Lorem ipsum')
 
 if __name__ == "__main__": 
     app.run(debug=True, port=5500) 
