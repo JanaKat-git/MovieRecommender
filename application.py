@@ -22,21 +22,19 @@ def index():
 @app.route('/recommender')
 def recommender():
     #save user input as dict and print it
-    html_form_data = dict(request.args)
-    print(html_form_data)
+    html_from_data = dict(request.args)
+    print(html_from_data)
 
     #load pickled model
     with open("nmf_m.pkl", "rb") as f:
         R, P, Q, nmf = pickle.load(f) 
-    
-    print('loaded')
+
     
     #make recommendations for new user
-    recs= user_recommendation(html_form_data, R, Q, nmf)
+    recs= user_recommendation(html_from_data, R, Q, nmf)
     print(recs)
     
-    return render_template('recommendations.html',
-                            movies = 'Lorem ipsum')
+    return render_template("recommendations.html", movies=recs)
 
 if __name__ == "__main__": 
     app.run(debug=True, port=5500) 
