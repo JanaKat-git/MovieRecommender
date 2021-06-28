@@ -6,6 +6,36 @@ import pandas as pd
 import numpy as np
 from sklearn.decomposition import NMF
 
+def create_user_item_matrix(file_ratings, file_movies, n_rows):
+    '''
+    Create a user_item_matrix as pd.DataFrame.
+
+    Paramters
+    ---------
+    file_ratings: str
+        csv-file with ratings data
+    file_movies: str
+        csv-file with movie data
+    n_rows: int
+        Number of Rows reading from the csv-files.
+
+    Returns
+    ---------
+    df_ratings_movie: pd.DataFrame
+        The created user-item-matrix
+    '''
+
+    ratings = pd.read_csv(file_ratings, nrows=n_rows) #dataset to big --> kernel crashs everytime just use first 1_000_000 data
+
+    #make a dict with movieId and title
+    movies = pd.read_csv(file_movies, index_col=0)
+    movies.drop(columns='genres', inplace=True)
+
+    df_ratings_movie = pd.merge(ratings, movies, how='inner', on='movieId')
+    df_ratings_movie.drop(columns=['timestamp','movieId'], inplace=True)
+    
+    return df_ratings_movie
+
 def model_recommender(df):
     '''
     Uses pd.Dataframe of user-item-matrix and cerates and trains a NMF model.
