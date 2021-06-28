@@ -16,7 +16,7 @@ train and pickle a NMF model. Use this model to make recommendations from a **us
 
 1) Run `application.py`
 2) Open link in Browser
-3) Use trained model to make recommendations for user (input in Web Interface)
+3) Use trained model to make recommendations for user (input in web interface)
 
 
 
